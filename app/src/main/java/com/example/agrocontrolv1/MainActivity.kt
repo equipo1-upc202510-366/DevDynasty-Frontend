@@ -5,19 +5,14 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.compose.rememberNavController
 import androidx.room.Room
 import com.example.agrocontrolv1.common.Constants
 import com.example.agrocontrolv1.data.local.AppDatabase
 import com.example.agrocontrolv1.data.remote.ProductService
 import com.example.agrocontrolv1.data.repository.ProductRepository
-import com.example.agrocontrolv1.presentation.product_list.ProductListScreen
+import com.example.agrocontrolv1.navigation.AppNavGraph
+import com.example.agrocontrolv1.presentation.home.HomeScreen
 import com.example.agrocontrolv1.presentation.product_list.ProductListViewModel
 import com.example.agrocontrolv1.ui.theme.AgroControlv1Theme
 import retrofit2.Retrofit
@@ -45,8 +40,8 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             AgroControlv1Theme {
-                ProductListScreen( viewModel)
-            }
+                val navController = rememberNavController()
+                AppNavGraph(navController = navController)            }
         }
     }
 }
