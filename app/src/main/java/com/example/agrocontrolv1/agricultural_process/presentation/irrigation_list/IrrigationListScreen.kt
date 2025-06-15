@@ -1,10 +1,10 @@
 package com.example.agrocontrolv1.agricultural_process.presentation.irrigation_list
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -17,14 +17,18 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
-// Colores personalizados similares a la imagen web
 val LightGreen = Color(0xFF4CAF50)
 val BackgroundColor = Color(0xFFF9F9F9)
 
+// Modelo simple de entrada de riego
 data class IrrigationEntry(val date: String, val hours: Int)
 
 @Composable
-fun IrrigationListScreen() {
+fun IrrigationListScreen(
+    navigateBack: () -> Unit,
+    navigateToEdit: (IrrigationEntry) -> Unit,
+    navigateToNew: () -> Unit
+) {
     val irrigationList = remember {
         mutableStateListOf(
             IrrigationEntry("2023-03-15", 2),
@@ -39,10 +43,11 @@ fun IrrigationListScreen() {
         containerColor = BackgroundColor,
         floatingActionButton = {
             FloatingActionButton(
-                onClick = { /* Acción para agregar entrada */ },
-                containerColor = LightGreen
+                onClick = { navigateToNew() },
+                containerColor = LightGreen,
+                modifier = Modifier.size(70.dp)
             ) {
-                Text("Add", color = Color.White)
+                Text("+", fontSize = 30.sp, color = Color.White)
             }
         }
     ) { padding ->
@@ -52,13 +57,19 @@ fun IrrigationListScreen() {
                 .fillMaxSize()
                 .padding(16.dp)
         ) {
-            Text(
-                text = "Irrigation",
-                fontSize = 28.sp,
-                fontWeight = FontWeight.Bold,
-                color = Color.Black,
-                modifier = Modifier.padding(bottom = 16.dp)
-            )
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                IconButton(onClick = { navigateBack() }) {
+                    Icon(Icons.Default.ArrowBack, contentDescription = "Back")
+                }
+                Text(
+                    text = "Irrigation",
+                    fontSize = 28.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = Color.Black
+                )
+            }
+
+            Spacer(modifier = Modifier.height(16.dp))
 
             LazyColumn(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 items(irrigationList) { entry ->
@@ -79,7 +90,7 @@ fun IrrigationListScreen() {
                             }
                             Row(verticalAlignment = Alignment.CenterVertically) {
                                 Button(
-                                    onClick = { /* Acción Ver */ },
+                                    onClick = { navigateToEdit(entry) },
                                     colors = ButtonDefaults.buttonColors(containerColor = LightGreen)
                                 ) {
                                     Text("View", color = Color.White)
