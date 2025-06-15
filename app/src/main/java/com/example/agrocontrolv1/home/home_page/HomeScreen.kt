@@ -26,7 +26,16 @@ fun HomeScreen(navigateTo: (String) -> Unit) {
         },
         HomeSection("Irrigation", R.drawable.irrigation_image) {
             navigateTo("irrigation")
-        }
+        },
+        HomeSection("Harvest", R.drawable.harvest_image) {
+            navigateTo("harvest")
+        },
+        HomeSection("Finances", R.drawable.finances_image) {
+            navigateTo("finances")
+        },
+        HomeSection("Workers", R.drawable.workers_image) {
+            navigateTo("workers")
+        },
 
     )
 

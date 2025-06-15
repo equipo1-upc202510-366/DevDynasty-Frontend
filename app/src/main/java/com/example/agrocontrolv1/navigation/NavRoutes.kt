@@ -5,5 +5,11 @@ object NavRoutes {
     const val FUMIGATION = "fumigation"
     const val PRODUCTS = "products"
     const val IRRIGATION = "irrigation"
+    const val WORKERS = "workers"
+    const val ADD_WORKER = "add_worker"
+    const val IRRIGATION_EDIT = "irrigation_edit"
+    const val IRRIGATION_NEW = "irrigation_new"
+    const val HARVEST = "harvest"
+    const val FINANCES = "finances"
 
 }
