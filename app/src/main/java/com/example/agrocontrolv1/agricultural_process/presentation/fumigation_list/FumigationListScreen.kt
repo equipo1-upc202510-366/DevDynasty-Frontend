@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -16,22 +17,25 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
-// Colores personalizados
-val DarkGreen = Color(0xFF0C3C37)
 val LightGreen = Color(0xFF4CAF50)
 val BackgroundColor = Color(0xFFF9F9F9)
 
-data class FumigationEntry(val date: String, val hours: Int, val type: String)
+// Modelo simple de entrada de fumigación
+data class FumigationEntry(val date: String, val hours: Int)
 
 @Composable
-fun FumigationListScreen() {
-    val entries = remember {
+fun FumigationListScreen(
+    navigateBack: () -> Unit,
+    navigateToEdit: (FumigationEntry) -> Unit,
+    navigateToNew: () -> Unit
+) {
+    val fumigationList = remember {
         mutableStateListOf(
-            FumigationEntry("2023-03-15", 2, "Fumigation"),
-            FumigationEntry("2023-04-11", 3, "Fumigation"),
-            FumigationEntry("2023-06-12", 3, "Fumigation"),
-            FumigationEntry("2023-02-10", 4, "Fertilization"),
-            FumigationEntry("2023-01-05", 2, "Fertilization")
+            FumigationEntry("2023-03-15", 2),
+            FumigationEntry("2023-04-11", 3),
+            FumigationEntry("2023-06-12", 3),
+            FumigationEntry("2023-02-10", 4),
+            FumigationEntry("2023-01-05", 2)
         )
     }
 
@@ -39,10 +43,11 @@ fun FumigationListScreen() {
         containerColor = BackgroundColor,
         floatingActionButton = {
             FloatingActionButton(
-                onClick = { /* Acción para agregar entrada */ },
-                containerColor = LightGreen
+                onClick = { navigateToNew() },
+                containerColor = LightGreen,
+                modifier = Modifier.size(70.dp)
             ) {
-                Text("Add", color = Color.White)
+                Text("+", fontSize = 30.sp, color = Color.White)
             }
         }
     ) { padding ->
@@ -52,16 +57,22 @@ fun FumigationListScreen() {
                 .fillMaxSize()
                 .padding(16.dp)
         ) {
-            Text(
-                text = "Fumigation & Fertilization",
-                fontSize = 26.sp,
-                fontWeight = FontWeight.Bold,
-                color = Color.Black,
-                modifier = Modifier.padding(bottom = 16.dp)
-            )
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                IconButton(onClick = { navigateBack() }) {
+                    Icon(Icons.Default.ArrowBack, contentDescription = "Back")
+                }
+                Text(
+                    text = "Fumigation",
+                    fontSize = 28.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = Color.Black
+                )
+            }
+
+            Spacer(modifier = Modifier.height(16.dp))
 
             LazyColumn(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                items(entries) { entry ->
+                items(fumigationList) { entry ->
                     Card(
                         modifier = Modifier.fillMaxWidth(),
                         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
@@ -76,17 +87,16 @@ fun FumigationListScreen() {
                             Column {
                                 Text("Date: ${entry.date}")
                                 Text("Hours: ${entry.hours}")
-                                Text("Type: ${entry.type}")
                             }
                             Row(verticalAlignment = Alignment.CenterVertically) {
                                 Button(
-                                    onClick = { /* Acción ver trabajadores */ },
+                                    onClick = { navigateToEdit(entry) },
                                     colors = ButtonDefaults.buttonColors(containerColor = LightGreen)
                                 ) {
                                     Text("View", color = Color.White)
                                 }
                                 IconButton(onClick = {
-                                    entries.remove(entry)
+                                    fumigationList.remove(entry)
                                 }) {
                                     Icon(
                                         imageVector = Icons.Default.Delete,

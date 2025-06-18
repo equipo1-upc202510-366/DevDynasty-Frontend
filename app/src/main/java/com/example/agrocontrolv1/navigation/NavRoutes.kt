@@ -3,6 +3,7 @@ package com.example.agrocontrolv1.navigation
 object NavRoutes {
     const val HOME = "home"
     const val FUMIGATION = "fumigation"
+    const val FUMIGATION_NEW = "fumigation_new"
     const val PRODUCTS = "products"
     const val IRRIGATION = "irrigation"
     const val WORKERS = "workers"
