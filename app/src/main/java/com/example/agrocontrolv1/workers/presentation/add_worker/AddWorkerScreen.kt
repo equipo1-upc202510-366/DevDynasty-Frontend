@@ -8,13 +8,17 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 val LightGreen = Color(0xFF4CAF50)
 val BackgroundColor = Color(0xFFF9F9F9)
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddWorkerScreen(navigateBack: () -> Unit) {
     var name by remember { mutableStateOf("") }
@@ -22,29 +26,34 @@ fun AddWorkerScreen(navigateBack: () -> Unit) {
     var document by remember { mutableStateOf("") }
 
     Scaffold(
-        containerColor = BackgroundColor
+        containerColor = BackgroundColor,
+        topBar = {
+            TopAppBar(
+                title = {
+                    Text(
+                        buildAnnotatedString {
+                            withStyle(SpanStyle(color = Color.White)) { append("Add Worker") }
+                        },
+                        style = MaterialTheme.typography.titleLarge
+                    )
+                },
+                navigationIcon = {
+                    IconButton(onClick = { navigateBack() }) {
+                        Icon(Icons.Default.ArrowBack, contentDescription = "Back", tint = Color.White)
+                    }
+                },
+                colors = TopAppBarDefaults.topAppBarColors(containerColor = Color(0xFF00332E))
+            )
+        }
     ) { padding ->
-        Column(
+    Column(
             modifier = Modifier
                 .padding(padding)
                 .fillMaxSize()
                 .padding(horizontal = 24.dp, vertical = 16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                IconButton(onClick = { navigateBack() }) {
-                    Icon(Icons.Default.ArrowBack, contentDescription = "Back")
-                }
-                Text(
-                    text = "Add New Worker",
-                    fontSize = 24.sp,
-                    fontWeight = FontWeight.Bold,
-                    modifier = Modifier.padding(start = 8.dp)
-                )
-            }
+
 
             Spacer(modifier = Modifier.height(8.dp))
             Text(

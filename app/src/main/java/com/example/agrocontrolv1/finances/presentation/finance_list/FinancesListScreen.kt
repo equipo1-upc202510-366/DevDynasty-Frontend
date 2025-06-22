@@ -13,7 +13,10 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
@@ -24,6 +27,7 @@ data class FinanceEntry(
     val profit: String
 )
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FinancesListScreen(
     navigateBack: () -> Unit
@@ -52,6 +56,25 @@ fun FinancesListScreen(
     var editRevenue by remember { mutableStateOf("") }
 
     Scaffold(
+        topBar = {
+            TopAppBar(
+                title = {
+                    Text(
+                        buildAnnotatedString {
+                            withStyle(SpanStyle(color = Color.White)) { append("Finances") }
+                        },
+                        style = MaterialTheme.typography.titleLarge
+                    )
+                },
+                navigationIcon = {
+                    IconButton(onClick = navigateBack) {
+                        Icon(Icons.Default.ArrowBack, contentDescription = "Back", tint = Color.White)
+                    }
+                },
+                colors = TopAppBarDefaults.topAppBarColors(containerColor = Color(0xFF00332E))
+            )
+        },
+
         floatingActionButton = {
             FloatingActionButton(
                 onClick = { showDialog = true },
@@ -67,12 +90,6 @@ fun FinancesListScreen(
                 .padding(16.dp)
                 .fillMaxSize()
         ) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                IconButton(onClick = navigateBack) {
-                    Icon(Icons.Default.ArrowBack, contentDescription = "Back")
-                }
-                Text("Finances", fontSize = 24.sp)
-            }
 
             Text(
                 "Track your harvest finances. Monitor your sales and profits over time to manage the profitability of your farm.",

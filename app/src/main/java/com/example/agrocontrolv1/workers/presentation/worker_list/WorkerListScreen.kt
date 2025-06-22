@@ -12,7 +12,10 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
@@ -21,6 +24,7 @@ val BackgroundColor = Color(0xFFF9F9F9)
 
 data class Worker(val name: String, val phone: String, val document: String)
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun WorkerListScreen(navigateBack: () -> Unit, navigateToAdd: () -> Unit) {
     val workers = remember {
@@ -36,6 +40,24 @@ fun WorkerListScreen(navigateBack: () -> Unit, navigateToAdd: () -> Unit) {
     var editingWorker by remember { mutableStateOf<Worker?>(null) }
 
     Scaffold(
+        topBar = {
+            TopAppBar(
+                title = {
+                    Text(
+                        buildAnnotatedString {
+                            withStyle(SpanStyle(color = Color.White)) { append("Workers") }
+                        },
+                        style = MaterialTheme.typography.titleLarge
+                    )
+                },
+                navigationIcon = {
+                    IconButton(onClick = navigateBack) {
+                        Icon(Icons.Default.ArrowBack, contentDescription = "Back", tint = Color.White)
+                    }
+                },
+                colors = TopAppBarDefaults.topAppBarColors(containerColor = Color(0xFF00332E))
+            )
+        },
         containerColor = BackgroundColor,
         floatingActionButton = {
             FloatingActionButton(
@@ -47,22 +69,13 @@ fun WorkerListScreen(navigateBack: () -> Unit, navigateToAdd: () -> Unit) {
             }
         }
     ) { padding ->
-        Column(
+
+    Column(
             modifier = Modifier
                 .padding(padding)
                 .padding(16.dp)
                 .fillMaxSize()
         ) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                IconButton(onClick = { navigateBack() }) {
-                    Icon(Icons.Default.ArrowBack, contentDescription = "Back")
-                }
-                Text(
-                    text = "Workers",
-                    fontSize = 28.sp,
-                    fontWeight = FontWeight.Bold
-                )
-            }
 
             Spacer(modifier = Modifier.height(16.dp))
 

@@ -20,6 +20,9 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import java.time.Instant
@@ -58,6 +61,25 @@ fun IrrigationViewScreen(
     }
 
     Scaffold(
+        topBar = {
+            TopAppBar(
+                title = {
+                    Text(
+                        buildAnnotatedString {
+                            withStyle(SpanStyle(color = Color.White)) { append("Irrigation ") }
+                            withStyle(SpanStyle(color = Color(0xFF4CAF50))) { append("schedule") }
+                        },
+                        style = MaterialTheme.typography.titleLarge
+                    )
+                },
+                navigationIcon = {
+                    IconButton(onClick = navigateBack) {
+                        Icon(Icons.Default.ArrowBack, contentDescription = "Back", tint = Color.White)
+                    }
+                },
+                colors = TopAppBarDefaults.topAppBarColors(containerColor = Color(0xFF00332E))
+            )
+        },
         floatingActionButton = {
             if (selectedDate != null) {
                 FloatingActionButton(
@@ -87,12 +109,6 @@ fun IrrigationViewScreen(
                 .fillMaxSize(),
             horizontalAlignment = Alignment.Start
         ) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                IconButton(onClick = navigateBack) {
-                    Icon(Icons.Default.ArrowBack, contentDescription = "Back")
-                }
-                Text("Irrigation schedule", fontSize = 22.sp)
-            }
 
             Spacer(modifier = Modifier.height(16.dp))
 

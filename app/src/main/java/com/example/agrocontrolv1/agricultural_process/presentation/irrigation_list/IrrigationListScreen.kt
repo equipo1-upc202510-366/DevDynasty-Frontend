@@ -13,7 +13,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
@@ -23,6 +26,7 @@ val BackgroundColor = Color(0xFFF9F9F9)
 // Modelo simple de entrada de riego
 data class IrrigationEntry(val date: String, val hours: Int)
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun IrrigationListScreen(
     navigateBack: () -> Unit,
@@ -40,6 +44,25 @@ fun IrrigationListScreen(
     }
 
     Scaffold(
+        topBar = {
+            TopAppBar(
+                title = {
+                    Text(
+                        buildAnnotatedString {
+                            withStyle(SpanStyle(color = Color.White)) { append("Irrigation") }
+                        },
+                        style = MaterialTheme.typography.titleLarge
+                    )
+                },
+                navigationIcon = {
+                    IconButton(onClick = navigateBack) {
+                        Icon(Icons.Default.ArrowBack, contentDescription = "Back", tint = Color.White)
+                    }
+                },
+                colors = TopAppBarDefaults.topAppBarColors(containerColor = Color(0xFF00332E))
+            )
+        },
+
         containerColor = BackgroundColor,
         floatingActionButton = {
             FloatingActionButton(
@@ -57,17 +80,6 @@ fun IrrigationListScreen(
                 .fillMaxSize()
                 .padding(16.dp)
         ) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                IconButton(onClick = { navigateBack() }) {
-                    Icon(Icons.Default.ArrowBack, contentDescription = "Back")
-                }
-                Text(
-                    text = "Irrigation",
-                    fontSize = 28.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = Color.Black
-                )
-            }
 
             Spacer(modifier = Modifier.height(16.dp))
 

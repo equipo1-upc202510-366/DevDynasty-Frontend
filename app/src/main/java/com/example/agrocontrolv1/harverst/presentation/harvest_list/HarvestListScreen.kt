@@ -13,12 +13,16 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 data class HarvestEntry(val name: String, val date: String, val weight: Int, val price: Double)
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HarvestListScreen(navigateBack: () -> Unit, onAddHarvest: (HarvestEntry) -> Unit) {
     val harvestList = remember {
@@ -48,6 +52,24 @@ fun HarvestListScreen(navigateBack: () -> Unit, onAddHarvest: (HarvestEntry) -> 
     var editPrice by remember { mutableStateOf("") }
 
     Scaffold(
+        topBar = {
+            TopAppBar(
+                title = {
+                    Text(
+                        buildAnnotatedString {
+                            withStyle(SpanStyle(color = Color.White)) { append("Harvest") }
+                        },
+                        style = MaterialTheme.typography.titleLarge
+                    )
+                },
+                navigationIcon = {
+                    IconButton(onClick = navigateBack) {
+                        Icon(Icons.Default.ArrowBack, contentDescription = "Back", tint = Color.White)
+                    }
+                },
+                colors = TopAppBarDefaults.topAppBarColors(containerColor = Color(0xFF00332E))
+            )
+        },
         floatingActionButton = {
             FloatingActionButton(
                 onClick = { showAddDialog = true },
@@ -62,17 +84,6 @@ fun HarvestListScreen(navigateBack: () -> Unit, onAddHarvest: (HarvestEntry) -> 
                 .padding(padding)
                 .padding(16.dp)
         ) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                IconButton(onClick = navigateBack) {
-                    Icon(Icons.Default.ArrowBack, contentDescription = "Back")
-                }
-                Text(
-                    text = "Harvest",
-                    fontSize = 24.sp,
-                    fontWeight = FontWeight.Bold,
-                    modifier = Modifier.weight(1f)
-                )
-            }
             Text(
                 text = "Track your sold harvest weight and earnings over time to manage your farm's profitability.",
                 fontSize = 14.sp,

@@ -13,7 +13,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
@@ -23,7 +26,9 @@ val BackgroundColor = Color(0xFFF9F9F9)
 // Modelo simple de entrada de fumigación
 data class FumigationEntry(val date: String, val hours: Int)
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
+
 fun FumigationListScreen(
     navigateBack: () -> Unit,
     navigateToEdit: (FumigationEntry) -> Unit,
@@ -40,6 +45,24 @@ fun FumigationListScreen(
     }
 
     Scaffold(
+        topBar = {
+            TopAppBar(
+                title = {
+                    Text(
+                        buildAnnotatedString {
+                            withStyle(SpanStyle(color = Color.White)) { append("Fumigation") }
+                        },
+                        style = MaterialTheme.typography.titleLarge
+                    )
+                },
+                navigationIcon = {
+                    IconButton(onClick = navigateBack) {
+                        Icon(Icons.Default.ArrowBack, contentDescription = "Back", tint = Color.White)
+                    }
+                },
+                colors = TopAppBarDefaults.topAppBarColors(containerColor = Color(0xFF00332E))
+            )
+        },
         containerColor = BackgroundColor,
         floatingActionButton = {
             FloatingActionButton(
@@ -57,20 +80,6 @@ fun FumigationListScreen(
                 .fillMaxSize()
                 .padding(16.dp)
         ) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                IconButton(onClick = { navigateBack() }) {
-                    Icon(Icons.Default.ArrowBack, contentDescription = "Back")
-                }
-                Text(
-                    text = "Fumigation",
-                    fontSize = 28.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = Color.Black
-                )
-            }
-
-            Spacer(modifier = Modifier.height(16.dp))
-
             LazyColumn(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 items(fumigationList) { entry ->
                     Card(
